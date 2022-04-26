@@ -3,6 +3,7 @@ const morgan = require('morgan')
 const cors = require('cors')
 const mongoose = require('mongoose')
 const heroes = require('./heroes')
+const heroModel = require('./heroes')
 async function connect() {
   await mongoose.connect('mongodb://localhost:27017/heroes')
 }
@@ -63,10 +64,24 @@ app.get('/heroes/:slug/power', function (req, res) {
 })
 
 app.post('/heroes', function (req, res) {
-  heroes.find({}).then(data => {
-    res.json(data.hero)
-  })
+  heroes.insertMany(req.body)
+  res.json(req.body)
+  console.log(req.body);
 })
+
+app.put('/heroes/:slug/powers', function (req, res) {
+  const data = req.body
+  heroModel.findOneAndUpdate(
+    { slug: req.params.slug },
+    { $push: { power: data.power } },
+    { new: true }
+  )
+  then(data => {
+    res.json(data)
+  })
+  console.log(req.body);
+})
+
 
 
 app.listen(3000)

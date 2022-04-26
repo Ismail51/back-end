@@ -73,12 +73,12 @@ app.put('/heroes/:slug/powers', function (req, res) {
   const data = req.body
   heroModel.findOneAndUpdate(
     { slug: req.params.slug },
-    { $push: { power: data.power } },
+    { $push: { power: data.powers } },
     { new: true }
   )
-  then(data => {
-    res.json(data)
-  })
+    .then(data => {
+      res.json(data)
+    })
   console.log(req.body);
 })
 
